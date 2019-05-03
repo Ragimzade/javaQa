@@ -6,18 +6,21 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
 
+import java.sql.Driver;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.fail;
 
 public class ApplicationManager {
     WebDriver driver;
+    private ContactHelper contactHelper;
     private NavigationHelper navigationHelper;
     private SessionHelper sessionHelper;
     private GroupHelper groupHelper;
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
     private String browser;
+
 
     public ApplicationManager(String browser) {
 
@@ -32,11 +35,12 @@ public class ApplicationManager {
         } else if (browser.equals(BrowserType.IE)){
             driver = new InternetExplorerDriver();
         }
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        //driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get("http://localhost/addressbook/group.php");
         groupHelper = new GroupHelper(driver);
         sessionHelper = new SessionHelper(driver);
         navigationHelper = new NavigationHelper(driver);
+        contactHelper = new ContactHelper(driver);
         sessionHelper.login("admin", "secret");
     }
 
@@ -92,4 +96,9 @@ public class ApplicationManager {
     public NavigationHelper getNavigationHelper() {
         return navigationHelper;
     }
+
+    public ContactHelper getContactHelper() {
+        return contactHelper;
+    }
+
 }
