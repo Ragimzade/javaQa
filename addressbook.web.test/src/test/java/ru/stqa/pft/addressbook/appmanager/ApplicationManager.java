@@ -1,26 +1,46 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.BrowserType;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.fail;
 
 public class ApplicationManager {
     WebDriver driver;
-    private  NavigationHelper navigationHelper;
-    private  SessionHelper sessionHelper;
-    private  GroupHelper groupHelper;
+    private ContactHelper contactHelper;
+    private NavigationHelper navigationHelper;
+    private SessionHelper sessionHelper;
+    private GroupHelper groupHelper;
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
+    private String firefox;
+    private String browser;
+
+    public ApplicationManager(String browser) {
+        this.browser = browser;
+    }
 
     public void init() {
-        driver = new FirefoxDriver();
-        //driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        if (browser.equals(BrowserType.FIREFOX)) {
+            driver = new FirefoxDriver();
+        } else if (browser.equals(BrowserType.CHROME)) {
+            driver = new ChromeDriver();
+        } else if (browser.equals(BrowserType.IE)) {
+            driver = new InternetExplorerDriver();
+        }
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.get("http://localhost/addressbook/");
         groupHelper = new GroupHelper(driver);
         sessionHelper = new SessionHelper(driver);
         navigationHelper = new NavigationHelper(driver);
+        contactHelper = new ContactHelper(driver);
         sessionHelper.login("admin", "secret");
+
     }
 
     public void stop() {
@@ -29,6 +49,7 @@ public class ApplicationManager {
         if (!"".equals(verificationErrorString)) {
             fail(verificationErrorString);
         }
+
     }
 
     private boolean isElementPresent(By by) {
@@ -74,5 +95,9 @@ public class ApplicationManager {
 
     public NavigationHelper getNavigationHelper() {
         return navigationHelper;
+    }
+
+    public ContactHelper getContactHelper() {
+        return contactHelper;
     }
 }
