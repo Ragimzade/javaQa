@@ -33,7 +33,7 @@ public class ApplicationManager {
         } else if (browser.equals(BrowserType.IE)) {
             driver = new InternetExplorerDriver();
         }
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
         driver.get("http://localhost/addressbook/");
         groupHelper = new GroupHelper(driver);
         sessionHelper = new SessionHelper(driver);
@@ -52,7 +52,7 @@ public class ApplicationManager {
 
     }
 
-    private boolean isElementPresent(By by) {
+    protected boolean isElementPresent(By by) {
         try {
             driver.findElement(by);
             return true;
