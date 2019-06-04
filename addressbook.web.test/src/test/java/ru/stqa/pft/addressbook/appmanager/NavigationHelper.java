@@ -3,7 +3,7 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class NavigationHelper extends HelperBase{
+public class NavigationHelper extends HelperBase {
 
     public NavigationHelper(WebDriver driver) {
 
@@ -11,10 +11,21 @@ public class NavigationHelper extends HelperBase{
     }
 
     public void goToGroupPage() {
-      click(By.linkText("groups"));
+        if (isElementPresent(By.tagName("h1"))
+                && driver.findElement(By.tagName("h1")).getText().equals("Groups")
+                && isElementPresent(By.name("new"))) {
+            return;
+        }
+        click(By.linkText("groups"));
+        System.out.println("not returned");
     }
 
-    public void goToHomePage(){
+    public void goToHomePage() {
+        if (isElementPresent(By.id("maintable"))) {
+            System.out.println("returned");
+            return;
+
+        }
         click(By.linkText("home"));
     }
 }

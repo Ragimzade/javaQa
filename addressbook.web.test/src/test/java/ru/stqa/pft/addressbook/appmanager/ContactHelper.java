@@ -6,6 +6,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ContactHelper extends HelperBase {
     public ContactHelper(WebDriver driver) {
         super(driver);
@@ -22,8 +25,8 @@ public class ContactHelper extends HelperBase {
         type(By.name("lastname"), contactData.getLastname());
         if (creation) {
             new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+
         } else {
-            System.out.println("It's not creation");
             Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
 
@@ -56,5 +59,24 @@ public class ContactHelper extends HelperBase {
 
     public void submitContactModification() {
         click(By.name("update"));
+    }
+
+    public boolean isThereContact() {
+        return isElementPresent(By.name("selected[]"));
+    }
+
+
+    public void createContact(ContactData contact, boolean b) {
+        initContactCreation();
+        fillContactForm(contact, b);
+        submitContactCreation();
+        returnToHomePage();
+
+    }
+
+    public List<ContactData> getContactList() {
+        List<ContactData> contacts = new ArrayList<>();
+
+        return contacts;
     }
 }
